@@ -1,296 +1,72 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
 <!doctype html>
 <html lang="en">
-
 <head>
-	<meta charset="utf-8">
-	<meta name="description" content="Staff Me If You Can">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>ADVENTS | Staff Me If You Can</title>
-	<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-	<link rel="import" href="elements/elements.html">
-	<link rel="import" href="styles/app-theme.html">
-	<link rel="icon" type="image/png" href="http://www.advents.fr/images/favicon.png" />
-	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-	<style>
-		html, body {height: 100%;}
-		body {
-			font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
-			background-color:#eee;
-			-webkit-tap-highlight-color: rgba(0,0,0,0);
-			-webkit-touch-callout: none;
-		}
-		
-	</style>
+  <title>My App</title>
+
+  <link rel="shortcut icon" sizes="32x32" href="/images/app-icon-32.png">
+
+  <meta name="theme-color" content="#fff">
+  <link rel="manifest" href="/manifest.json">
+
+  <script>
+
+    // setup Polymer options
+    window.Polymer = {lazyRegister: true, dom: 'shadow'};
+
+    // load webcomponents polyfills
+    (function() {
+      if ('registerElement' in document
+          && 'import' in document.createElement('link')
+          && 'content' in document.createElement('template')) {
+        // browser has web components
+      } else {
+        // polyfill web components
+        var e = document.createElement('script');
+        e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+        document.head.appendChild(e);
+      }
+    })();
+
+    // load pre-caching service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+
+  </script>
+
+  <link rel="import" href="/src/my-app.html">
+
+  <style>
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      background-color: #eee;
+    }
+
+  </style>
 
 </head>
-<body unresolved class="fullbleed layout vertical">
-	<template is="dom-bind" id="staffMe">
-	
-		<style is="custom-style">
-			paper-card{width: 280px;margin:5px;}
-			.card-content {height: 120px;}
-			img.avatar {
-				width: 80px;
-				height: 80px;
-				border-radius: 50%;
-				margin-right:5px;
-				margin-top:5px;
-			}
-			img.small {
-				width: 40px;
-				height: 40px;
-			}
-			.red{color:red;}
-			.green{color:var(--smiyc-third-accent-color);}
-			paper-dialog[modal]{width:75%;}
-			paper-dialog-scrollable > div.skills{min-height:48px;line-height:17px;}
-			paper-dialog-scrollable > paper-button{width:95%;margin-top:5px;margin-bottom:5px;}
-			paper-dialog > h2{margin:0;}
-			paper-dialog > h2 > div{display:inline-block;height:40px;}
-			paper-item{background-color:#fff;;padding-left:15%;padding-right:15%;}
-			div[secondary]{font-style:italic;font-size:14px;color:#bbb;}
-			span.comment{font-style:italic;}
-			.card-content  > div {
-				height: 30px;
-				margin-right:5px;
-				margin-top:5px;
-			}
-			paper-menu a > img, paper-material > img{
-				width: 24px;
-				height: 24px;
-				border-radius: 50%;
-				margin-right:5px;
-			}
-			div.page{text-align:center;padding-bottom:30px;}
-			
-			paper-material:hover{background-color: var(--smiyc-back-color);}
-			paper-material{
-				cursor:pointer;
-				background-color: #fff;
-				padding:18px;
-			}
-			paper-material.subtitle{
-				margin-top:18px;
-				background-color: var(--smiyc-fourth-accent-color);
-				color: #fff;
-			}
-			paper-button[raised]{
-				background-color: var(--smiyc-secondary-accent-color);
-				color: #fff;
-			}
-			paper-material.subtitle2{
-				margin-top:18px;
-				background-color: var(--smiyc-secondary-accent-color);
-				color: #fff;
-			}
-			paper-material.subtitle3{
-				margin-top:18px;
-				background-color: var(--smiyc-third-accent-color);
-				color: #fff;
-			}
-			.flex{text-align:center;}
-			paper-icon-button > img{border-radius: 50%;}
-			paper-fab{
-				position:fixed;bottom:12px;right:12px;
-				--paper-fab-background: var(--smiyc-third-accent-color);
-				--paper-fab-keyboard-focus-background: var(--smiyc-third-accent-color)
-			}
-			paper-dialog.notmodal{position:fixed;top:0;bottom:0;left:0;right:0;margin:0;padding:0;}
-			paper-toolbar{margin-top:0;}
-			div.buttons{position:fixed;bottom:0;text-align:center;}
-			paper-dialog{text-align:center;}
-			paper-dialog-scrollable{padding-top:10px;}
-			paper-input{margin:5px;width:90%;display:inline;}
-			h3{margin-top:30px;margin-bottom:10px;}
-		</style>
-    <paper-header-panel main>
-      <paper-toolbar>
-        <paper-icon-button icon="{{navicon}}" on-tap="disconnect"></paper-icon-button>
-        <div class="flex">[[title]]</div>
-				<paper-icon-button src="images/{{user.avatar}}" on-tap="openProfile"></paper-icon-button>
-      </paper-toolbar>
-      <div>
-				<div hidden$="{{isAuth}}" class="page">
-					<template is="dom-repeat"	items="{{users}}"	as="u">
-						<paper-card heading="{{u.pseudo}}">
-							<div class="card-content">
-								<img class="avatar" src="images/[[u.avatar]]">
-								<div>{{u.desc}}</div>
-							</div>
-							<div class="card-actions">
-								<paper-button on-tap="connect">Se connecter</paper-button>
-							</div>
-						</paper-card>
-					</template>
-				</div>
-				<div hidden$="{{!isAuth}}" class="page">
-					<paper-tabs selected="{{selected}}" on-iron-select="newSel">
-						<paper-tab><iron-icon icon="date-range"></iron-icon>Dispos ({{user.dispos.length}})</paper-tab>
-						<paper-tab><iron-icon icon="rowing"></iron-icon>Besoins ({{user.requests.length}})</paper-tab>
-						<paper-tab><iron-icon icon="work"></iron-icon>Travaux ({{sumJobs}})</paper-tab>
-					</paper-tabs>
-					<iron-pages selected="{{selected}}">
-						<div>
-							<paper-material elevation="1" class="subtitle">Mes disponibilités</paper-material>
-							<template is="dom-repeat"	items="{{user.dispos}}"	as="d">
-								<paper-material>
-									<span>Charge : {{d.wLoad}}j /  du {{d.dateFrom}} au {{d.dateTo}}</span>
-									<paper-icon-button icon="delete" style="position:absolute;right:6px;bottom:6px;" on-tap="removeDispo"></paper-icon-button>
-								</paper-material>
-							</template>
-						</div>
-						<div>
-							<paper-material elevation="1" class="subtitle2">Mes besoins</paper-material>
-							<template is="dom-repeat"	items="{{user.requests}}"	as="r" id="requestsRepeat">
-								<smiyc-req  req="{{r}}" user="{{user}}" users="{{users}}" on-select-candidate="selectCandidate"></smiyc-req>
-							</template>
-						</div>
-						<div>
-							<paper-material elevation="1" class="subtitle3">Mes Travaux</paper-material>
-							<paper-material on-tap="toggleWaiting">Propositions ({{user.jobs.waiting.length}})</paper-material>
-							<iron-collapse id="waiting">
-								<template is="dom-repeat"	items="{{user.jobs.waiting}}"	as="w">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[w.userFrom.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé par : {{w.userFrom.pseudo}}</div>
-											<div secondary>{{w.desc}}</div>
-											<div secondary>Charge : {{w.wLoad}}j /  du {{w.dateFrom}} au {{w.dateTo}}</div>
-										</paper-item-body>
-										<paper-icon-button class="red" icon="close" on-tap="denyProp"></paper-icon-button>
-										<paper-icon-button icon="done" on-tap="acceptProp"></paper-icon-button>
-									</paper-item>
-								</template>
-							</iron-collapse>
-							<paper-material on-tap="toggleTodo">En cours ({{user.jobs.todo.length}})</paper-material>
-							<iron-collapse id="todo">
-								<template is="dom-repeat"	items="{{user.jobs.todo}}"	as="t">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[t.userFrom.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé par : {{t.userFrom.pseudo}}</div>
-											<div secondary>{{t.desc}}</div>
-											<div secondary>Charge : {{t.wLoad}}j /  du {{t.dateFrom}} au {{t.dateTo}}</div>
-										</paper-item-body>
-										<paper-icon-button icon="done-all" on-tap="doneTodo"></paper-icon-button>
-									</paper-item>
-								</template>
-							</iron-collapse>
-							<paper-material on-tap="toggleDone">Terminés ({{user.jobs.done.length}})</paper-material>
-							<iron-collapse id="done">
-								<template is="dom-repeat"	items="{{user.jobs.done}}"	as="d">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[d.userFrom.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé par : {{d.userFrom.pseudo}}</div>
-											<div secondary>{{d.desc}}</div>
-											<div secondary>Charge : {{d.wLoad}}j /  du {{d.dateFrom}} au {{d.dateTo}}</div>
-										</paper-item-body>
-									</paper-item>
-								</template>
-							</iron-collapse>
-							<paper-material elevation="1" class="subtitle2">Leurs Travaux</paper-material>
-							<paper-material on-tap="toggleOthersWaiting">En attente acceptation ({{user.jobs.othersWaiting.length}})</paper-material>
-							<iron-collapse id="othersWaiting">
-								<template is="dom-repeat"	items="{{user.jobs.othersWaiting}}"	as="w">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[w.userTo.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé à : {{w.userTo.pseudo}}</div>
-											<div secondary>{{w.desc}}</div>
-											<div secondary>Charge : {{w.wLoad}}j /  du {{w.dateFrom}} au {{w.dateTo}}</div>
-										</paper-item-body>
-										<paper-icon-button class="red" icon="close" on-tap="cancelProp"></paper-icon-button>
-									</paper-item>
-								</template>
-							</iron-collapse>
-							<paper-material on-tap="toggleOthersTodo">En cours ({{user.jobs.othersTodo.length}})</paper-material>
-							<iron-collapse id="othersTodo">
-								<template is="dom-repeat"	items="{{user.jobs.othersTodo}}"	as="t">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[t.userTo.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé à : {{t.userTo.pseudo}}</div>
-											<div secondary>{{t.desc}}</div>
-											<div secondary>Charge : {{t.wLoad}}j /  du {{t.dateFrom}} au {{t.dateTo}}</div>
-										</paper-item-body>
-									</paper-item>
-								</template>
-							</iron-collapse>
-							<paper-material on-tap="toggleOthersDone">Terminés ({{user.jobs.othersDone.length}})</paper-material>
-							<iron-collapse id="othersDone">
-								<template is="dom-repeat"	items="{{user.jobs.othersDone}}"	as="d">
-									<paper-item class="layout horizontal center">
-										<img class="avatar small" src="images/[[d.userTo.avatar]]">
-										<paper-item-body two-line class="flex">
-											<div>proposé à : {{d.userTo.pseudo}}</div>
-											<div secondary>{{d.desc}}</div>
-											<div secondary>Charge : {{d.wLoad}}j /  du {{d.dateFrom}} au {{d.dateTo}}</div>
-										</paper-item-body>
-										<paper-icon-button icon="delete" on-tap="removeOthersDone"></paper-icon-button>
-									</paper-item>
-								</template>
-							</iron-collapse>
-						</div>
-					</iron-pages>
-					<paper-fab icon="add" on-tap="openDialog" hidden$="{{!fabVis}}"></paper-fab>
-				</div>
-			</div>
-			<paper-dialog class="notmodal" id="dialog">
-				<paper-toolbar>
-					<div class="flex">[[diagTitle]]</div>
-				</paper-toolbar>
-				<paper-dialog-scrollable>
-					<iron-pages selected="{{selected}}">
-						<div>
-							<h3>Description de la dispo</h3>
-							<paper-input label="Charge" always-float-label id="newDispWorkLoad"></paper-input>
-							<paper-input label="entre le" always-float-label placeholder="jj/mm/aaaa" id="newDispDateFrom"></paper-input>
-							<paper-input label="et le" always-float-label placeholder="jj/mm/aaaa" id="newDispDateTo"></paper-input>
-						</div>
-						<div>
-							<h3>Description de la demande</h3>
-							<paper-input label="Description du job" always-float-label id="newReqDesc"></paper-input>
-							<paper-input label="Charge" always-float-label value="" id="newReqWorkLoad"></paper-input>
-							<paper-input label="entre le..." always-float-label placeholder="jj/mm/aaaa" id="newReqDateFrom"></paper-input>
-							<paper-input label="et le..." always-float-label placeholder="jj/mm/aaaa" id="newReqDateTo"></paper-input>
-						</div>
-					</iron-pages>
-				</paper-dialog-scrollable>
-				<div class="buttons">
-					<paper-button dialog-dismiss>Annuler</paper-button>
-					<paper-button dialog-confirm on-tap="addItem" raised>Ajouter</paper-button>
-				</div>
-			</paper-dialog>
-			<paper-dialog class="notmodal" id="profile">
-				<paper-toolbar>
-					<div class="flex">[[user.pseudo]]</div>
-				</paper-toolbar>
-				<paper-dialog-scrollable>
-					<img class="avatar" src="images/[[user.avatar]]">
-					<paper-input label="Ma devise..." always-float-label value="{{user.desc}}"></paper-input>
-					<h3>Mes compétences</h3>
-					<div class="layout horizontal center">
-						<paper-input label="Ajouter une corde à mon arc" always-float-label value="" id="newSkill"></paper-input>
-						<paper-icon-button icon="add" on-tap="addSkill"></paper-icon-button>
-					</div>
-					<template is="dom-repeat"	items="{{user.skills}}"	as="s">
-						<paper-material>
-							<span>{{s}}</span>
-							<paper-icon-button icon="delete" on-tap="removeSkill" style="position:absolute;right:6px;bottom:6px;"></paper-icon-button>
-						</paper-material>
-					</template>
-				</paper-dialog-scrollable>
-				<div class="buttons">
-					<paper-button dialog-confirm raised on-tap="saveProfile">Ok</paper-button>
-				</div>
-			</paper-dialog>
-    </paper-header-panel>
-		
-	</template>
-  <script src="scripts/app.js"></script>
-</body>
+<body>
 
+  <my-app></my-app>
+
+</body>
 </html>

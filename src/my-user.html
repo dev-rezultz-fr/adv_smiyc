@@ -1,0 +1,128 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="my-avail.html">
+
+<dom-module id="my-user">
+	<style include="iron-flex"></style>
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+			img.avatar {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				margin-right:5px;
+				margin-top:5px;
+			}
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+      }
+      .circle {
+        display: inline-block;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        background: #ddd;
+        line-height: 64px;
+        font-size: 30px;
+        color: #555;
+        text-align: center;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 16px 0;
+        color: #212121;
+      }
+			paper-fab{margin-left:5px;margin-right:5px;}
+			paper-progress{margin-left:5px;margin-right:5px;}
+    </style>
+
+    <div class="card">
+			<img class="avatar" src="../images/{{user.photo}}">
+			<div>
+				<template is="dom-repeat" items="{{weeks}}" as="w">
+					<div class="layout horizontal center">
+						<div class="flex">{{w.from}} -> {{w.to}}</div>
+						<div class="flex">{{w.avail.avail}}j</div>
+						<my-avail class="flex" avail-path="{{w.weekAvailPath}}" avail="{{w.avail}}"></my-avail>
+					</div>
+				</template>
+			</div>
+    </div>
+
+  </template>
+
+  <script>
+		var months = ['Janv','Fév','Mars','Avril', 'Mai','Juin','Juil', 'Août', 'Sept', 'Oct','Nov', 'Déc'];
+
+    Polymer({
+
+      is: 'my-user',
+			
+			properties: {
+				user: {
+					notify: true,
+					type: Object
+				},
+				weeks: {
+					notify: true
+				}
+			},
+			
+			refresh: function(user){
+				if(user){
+					this.set('user',user,this);
+					this.notifyPath('user',this.user);
+				}
+			}
+			
+			_calculateAgend: function(day){
+				//change
+				var thisMonday = new Date(Date.now());
+				var thisFriday = new Date(Date.now());
+				while (thisMonday.getDay() != 1){
+					thisMonday.setTime(thisMonday.getTime() +  (-1 * 24 * 60 * 60 * 1000)); // One day back offset
+				}
+				thisFriday.setTime(thisMonday.getTime() +  (4 * 24 * 60 * 60 * 1000)); // days forward offset : from monday to friday
+				this.set('weeks',[],this);
+				for (var j = 0; j < 5; j++){
+					var dayPath = '0' + thisMonday.getDate();
+					var monthPath = '0' + thisMonday.getMonth()+1;
+					var availPath = 'w' + thisMonday.getFullYear() + monthPath.substring(monthPath.length - 2) + dayPath.substring(dayPath.length - 2);
+					var week = {
+						from: thisMonday.getDate() + ' ' + months[thisMonday.getMonth()],
+						to: thisFriday.getDate() + ' ' + months[thisFriday.getMonth()],
+						weekAvailPath: {userKey: this.user.$key, availPath: availPath}
+					};
+					this.weeks.push(week);
+					thisMonday.setTime(thisMonday.getTime() +  (7 * 24 * 60 * 60 * 1000)); // One week forward offset
+					thisFriday.setTime(thisFriday.getTime() +  (7 * 24 * 60 * 60 * 1000)); // One week forward offset
+				}
+				this.notifyPath('weeks',this.weeks.slice());
+			}
+
+    });
+
+  </script>
+
+</dom-module>

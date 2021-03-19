@@ -1,0 +1,8 @@
+{
+  "database": {
+    "rules": "staff.rules.json"
+  },
+  "hosting": {
+    "public": "build"
+  }
+}
