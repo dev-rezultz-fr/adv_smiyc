@@ -16,7 +16,7 @@
 		</paper-material>
 		<iron-collapse id="candidates">
 			<template is="dom-repeat"	items="{{users}}"	as="u" filter="{{notMe}}" observe="id">
-				<smiyc-candidate user="{{u}}" on-select="_selectCandidate"></smiyc-candidate>
+				<smiyc-candidate user="{{u}}" on-select="_selectCandidate" ></smiyc-candidate>
 			</template>
 		</iron-collapse>
 	</template>
