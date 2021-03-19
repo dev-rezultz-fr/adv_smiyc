@@ -1,0 +1,57 @@
+<dom-module id="smiyc-req">
+
+	<style is="custom-style">
+		paper-material{
+			cursor:pointer;
+			background-color: #fff;
+			padding:18px;
+		}
+		
+	</style>
+	<template>
+		<paper-material on-tap="_toggleCandidates">
+			<p>{{req.desc}}</p>
+			<span>Charge : {{req.wLoad}}j /  du {{req.dateFrom}} au {{req.dateTo}}</span>
+			<paper-icon-button icon="delete" style="position:absolute;right:6px;bottom:6px;" on-tap="removeReq"></paper-icon-button>
+		</paper-material>
+		<iron-collapse id="candidates">
+			<template is="dom-repeat"	items="{{users}}"	as="u" filter="{{notMe}}" observe="id">
+				<smiyc-candidate user="{{u}}" on-select="_selectCandidate" ></smiyc-candidate>
+			</template>
+		</iron-collapse>
+	</template>
+
+	<script>
+	
+	Polymer({
+
+		is: 'smiyc-req',
+		properties: {
+			req: {
+				notify: true
+			},
+			users: {
+				notify: true
+			},
+			user: {
+				notify: true
+			}
+		},		
+		_selectCandidate: function(e){
+			//console.log(e.detail.user);
+			this.fire('select-candidate',{request: this.req,user: e.detail.user});
+		},
+		_toggleCandidates: function(e){
+			this.$.candidates.toggle();
+		},
+		notMe: function(u){
+			return !(u.id == this.user.id);
+		},
+		removeReq : function(e){
+			this.arrayDelete('user.requests',this.req);
+		}
+	});
+
+	</script>
+
+</dom-module>
