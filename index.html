@@ -49,7 +49,7 @@
 			paper-dialog-scrollable > paper-button{width:95%;margin-top:5px;margin-bottom:5px;}
 			paper-dialog > h2{margin:0;}
 			paper-dialog > h2 > div{display:inline-block;height:40px;}
-			paper-item{background-color:#fff;;padding-left:15%;padding-right:15%;}
+			paper-item{background-color:#fff;}
 			div[secondary]{font-style:italic;font-size:14px;color:#bbb;}
 			span.comment{font-style:italic;}
 			.card-content  > div {
@@ -152,7 +152,7 @@
 							<paper-material on-tap="toggleWaiting">Propositions ({{user.jobs.waiting.length}})</paper-material>
 							<iron-collapse id="waiting">
 								<template is="dom-repeat"	items="{{user.jobs.waiting}}"	as="w">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[w.userFrom.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé par : {{w.userFrom.pseudo}}</div>
@@ -167,7 +167,7 @@
 							<paper-material on-tap="toggleTodo">En cours ({{user.jobs.todo.length}})</paper-material>
 							<iron-collapse id="todo">
 								<template is="dom-repeat"	items="{{user.jobs.todo}}"	as="t">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[t.userFrom.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé par : {{t.userFrom.pseudo}}</div>
@@ -181,7 +181,7 @@
 							<paper-material on-tap="toggleDone">Terminés ({{user.jobs.done.length}})</paper-material>
 							<iron-collapse id="done">
 								<template is="dom-repeat"	items="{{user.jobs.done}}"	as="d">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[d.userFrom.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé par : {{d.userFrom.pseudo}}</div>
@@ -195,7 +195,7 @@
 							<paper-material on-tap="toggleOthersWaiting">En attente acceptation ({{user.jobs.othersWaiting.length}})</paper-material>
 							<iron-collapse id="othersWaiting">
 								<template is="dom-repeat"	items="{{user.jobs.othersWaiting}}"	as="w">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[w.userTo.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé à : {{w.userTo.pseudo}}</div>
@@ -209,7 +209,7 @@
 							<paper-material on-tap="toggleOthersTodo">En cours ({{user.jobs.othersTodo.length}})</paper-material>
 							<iron-collapse id="othersTodo">
 								<template is="dom-repeat"	items="{{user.jobs.othersTodo}}"	as="t">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[t.userTo.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé à : {{t.userTo.pseudo}}</div>
@@ -222,7 +222,7 @@
 							<paper-material on-tap="toggleOthersDone">Terminés ({{user.jobs.othersDone.length}})</paper-material>
 							<iron-collapse id="othersDone">
 								<template is="dom-repeat"	items="{{user.jobs.othersDone}}"	as="d">
-									<paper-item class="layout horizontal center">
+									<paper-item>
 										<img class="avatar small" src="images/[[d.userTo.avatar]]">
 										<paper-item-body two-line class="flex">
 											<div>proposé à : {{d.userTo.pseudo}}</div>
